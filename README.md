@@ -40,7 +40,7 @@ dependencies:
 
 More details about these can be found in the [`pubspec.yaml`](https://github.com/azadlinavay/currencyconverter/blob/main/pubspec.yaml) file.
 
-## Usage
+## How To Install
 
 - download the archive and open it with  vs code
 - in terminal run "flutter pub dev"
