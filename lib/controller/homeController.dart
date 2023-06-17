@@ -1,58 +1,62 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:currencyconverter/models/currency_model.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class Controller extends GetxController {
-  double count = 0;
-  double singleAmount = 0;
-  static String apiSite =
-      "https://v6.exchangerate-api.com/v6/cb2174413b94964f2449a4c4/latest/";
-  static String apiSiteURL = "v6.exchangerate-api.com";
+import '../components/http_helper.dart';
 
-  static Future<http.Response> getUriForAPI({
-    required String path,
-  }) async {
-    debugPrint("calling $apiSite$path");
-    return await http.get(
-      Uri.https(
-        Controller.apiSiteURL,
-        "/v6/cb2174413b94964f2449a4c4/latest/$path",
-      ),
-    );
-  }
+class Controller extends GetxController {
+  double amount = 0;
+  double singleAmount = 0;
 
   // main function to fetch data from the APi
-
   getCurrencies(
       {required String from,
       required String number,
       required String to}) async {
-    http.Response res = await http.get(
-      Uri.https(
-        Controller.apiSiteURL,
-        "/v6/cb2174413b94964f2449a4c4/latest/$from",
-      ),
-    );
-
-    int number1 = int.parse(number);
-    var name = CurrencyModel.fromJson(res.body);
-
-    var result = name.conversion_rates[to] * number1;
-
-    count = result;
-    singleAmount = name.conversion_rates[to] * 1;
-    print(count);
-    print("Azxad");
-
-    update();
-    // if (res.statusCode == 200) {
-    //   var list = body["supported_codes"];
-    //   List<String> currencies = list;
-    //   print(currencies.first);
-    //   return currencies;
-    // } else {
-    //   throw Exception('Failed to connect to the network!');
-    // }
+    try {
+      final response = await http.get(
+        Uri.https(
+          HttpHelper.apiSiteURL,
+          "/v6/cb2174413b94964f2449a4c4/latest/$from",
+        ),
+      );
+      print(response.statusCode);
+      switch (response.statusCode) {
+        case 200:
+          // to convert from String to number
+          int number1 = int.parse(number);
+          var name = CurrencyModel.fromJson(response.body);
+          var result = name.conversion_rates[to] * number1;
+          amount = result;
+          singleAmount = name.conversion_rates[to] * 1;
+          update();
+        default:
+          throw Exception(response.reasonPhrase);
+      }
+    } on Exception catch (_) {
+      // to handle connection state error.
+      Get.dialog(
+        AlertDialog(
+          title: const Text('Error'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('$_'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Get.back();
+              },
+            ),
+          ],
+        ),
+      );
+      rethrow;
+    }
   }
 }
