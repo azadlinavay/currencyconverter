@@ -1,8 +1,7 @@
 # <img src="android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" alt="icon" width=30> Flutter Currency Converter
 
 
-Flutter Note Taking App helps one create quick notes, photo notes and more. One can change the color of the notes, mark them as starred or archived, create photo notes and save them locally, storing everything on a SQLite database.
-This app includes to add and edit and delete daily basic notes.
+A currency converter app built using Flutter is a powerful tool that allows users to quickly and conveniently convert one currency to another. Flutter, a cross-platform development framework, enables developers to create visually appealing and highly functional mobile applications for both iOS and Android platforms.
 
 ## List of Contents
 
